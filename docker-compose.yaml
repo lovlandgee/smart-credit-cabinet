@@ -1,0 +1,68 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: credit_cabinet
+      POSTGRES_USER: cabinet
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U cabinet -d credit_cabinet" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+  ml-service:
+    build:
+      context: ./ml-service
+    environment:
+      ML_TRAINING_DATA: ${ML_TRAINING_DATA:-/app/data/historical_applications.csv}
+      ML_ARTIFACT_PATH: ${ML_ARTIFACT_PATH:-/app/artifacts/risk_model.joblib}
+      ML_MODEL_VERSION: ${ML_MODEL_VERSION:-risk-logistic-v1}
+      ML_DATE_COLUMN: ${ML_DATE_COLUMN:-application_date}
+      ML_DRIFT_THRESHOLD: ${ML_DRIFT_THRESHOLD:-0.2}
+    volumes:
+      - ml-artifacts:/app/artifacts
+      - ./ml-service/data:/app/data:ro
+    healthcheck:
+      test: [ "CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8100/health')" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+  api:
+    build:
+      context: ./backend
+    environment:
+      DATABASE_URL: ${DATABASE_URL:?Set DATABASE_URL in .env}
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in .env}
+      JWT_TTL_MINUTES: ${JWT_TTL_MINUTES:-720}
+      PIPELINE_STEP_DELAY_SEC: ${PIPELINE_STEP_DELAY_SEC:-1.2}
+      CORS_ORIGINS: ${CORS_ORIGINS:?Set CORS_ORIGINS in .env}
+      SEED_ON_START: ${SEED_ON_START:-true}
+      ML_SERVICE_URL: ${ML_SERVICE_URL:-http://ml-service:8100}
+      ML_REQUEST_TIMEOUT: ${ML_REQUEST_TIMEOUT:-2.0}
+    depends_on:
+      db:
+        condition: service_healthy
+      ml-service:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+  web:
+    build:
+      context: ./frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+volumes:
+  pgdata:
+  ml-artifacts:

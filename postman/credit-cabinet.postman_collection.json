@@ -1,0 +1,78 @@
+{
+  "info": {
+    "name": "Credit Cabinet",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080" },
+    { "key": "token", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Login Maria",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/api/auth/login",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"email\":\"maria@pekarnia.test\",\"password\":\"demo123\"}"
+        }
+      }
+    },
+    {
+      "name": "Me",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{baseUrl}}/api/auth/me"
+      }
+    },
+    {
+      "name": "News",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{baseUrl}}/api/news"
+      }
+    },
+    {
+      "name": "Recommend",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": "{{baseUrl}}/api/products/recommend",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"purpose\":\"working_capital\",\"amount\":1500000,\"urgency\":\"normal\"}"
+        }
+      }
+    },
+    {
+      "name": "Create application",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": "{{baseUrl}}/api/applications",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"product_id\":\"turnover\",\"amount\":1500000,\"term_months\":12,\"purpose\":\"working_capital\",\"purpose_details\":\"Закупка муки и масла\"}"
+        }
+      }
+    },
+    {
+      "name": "List applications",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{baseUrl}}/api/applications"
+      }
+    }
+  ]
+}

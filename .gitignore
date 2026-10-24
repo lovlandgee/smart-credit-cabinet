@@ -1,0 +1,51 @@
+# OS and IDE
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.local
+*.secret
+*.token
+
+# Python
+.venv/
+**/.venv/
+__pycache__/
+**/__pycache__/
+*.py[cod]
+.pytest_cache/
+**/.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+coverage/
+htmlcov/
+
+# Node / frontend
+node_modules/
+**/node_modules/
+dist/
+**/dist/
+.vite/
+.npm/
+
+# Logs and local data
+*.log
+logs/
+data/
+ml-service/data/*
+!ml-service/data/.gitkeep
+*.db
+*.sqlite
+*.sqlite3
+
+# Docker and generated files
+.docker/
+ml-service/artifacts/
+*.joblib

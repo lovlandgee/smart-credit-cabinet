@@ -1,0 +1,162 @@
+THIRD-PARTY NOTICES
+====================
+
+Project: Smart Credit Cabinet hackathon demo
+
+This file lists third-party components, models, datasets, services, and simulated integrations used by the project. Exact dependency versions are declared in backend/requirements.txt, ml-service/requirements.txt, frontend/package.json, and the corresponding lock files.
+
+1. Python backend components
+----------------------------
+
+FastAPI
+- Used by: backend and ml-service HTTP APIs.
+- License: MIT.
+- Source: https://github.com/fastapi/fastapi
+
+Uvicorn
+- Used by: ASGI application server for backend and ml-service.
+- License: BSD-3-Clause.
+- Source: https://github.com/encode/uvicorn
+
+SQLAlchemy
+- Used by: backend database access and ORM models.
+- License: MIT.
+- Source: https://github.com/sqlalchemy/sqlalchemy
+
+Psycopg
+- Used by: PostgreSQL connectivity.
+- License: LGPL-3.0-or-later.
+- Source: https://github.com/psycopg/psycopg
+
+Pydantic and pydantic-settings
+- Used by: request schemas and environment configuration.
+- License: MIT.
+- Source: https://github.com/pydantic/pydantic
+
+python-jose
+- Used by: JWT authentication.
+- License: MIT.
+- Source: https://github.com/mpdagan/python-jose
+
+Passlib and bcrypt
+- Used by: demo password hashing and verification.
+- Licenses: BSD-3-Clause and Apache-2.0 respectively.
+- Sources: https://github.com/passlib2-project/passlib, https://github.com/pyca/bcrypt
+
+HTTPX
+- Used by: backend requests to the ML service.
+- License: BSD-3-Clause.
+- Source: https://github.com/encode/httpx
+
+Alembic
+- Included for database migration support.
+- License: MIT.
+- Source: https://github.com/sqlalchemy/alembic
+
+Pytest
+- Used by: backend and ML-service tests.
+- License: MIT.
+- Source: https://github.com/pytest-dev/pytest
+
+2. Frontend components
+----------------------
+
+React and React DOM
+- Used by: frontend single-page application.
+- License: MIT.
+- Source: https://github.com/facebook/react
+
+React Router
+- Used by: frontend client-side routing.
+- License: MIT.
+- Source: https://github.com/remix-run/react-router
+
+Lucide React
+- Used by: frontend interface icons.
+- License: ISC.
+- Source: https://github.com/lucide-icons/lucide
+
+Vite
+- Used by: frontend development and production build.
+- License: MIT.
+- Source: https://github.com/vitejs/vite
+
+TypeScript
+- Used by: frontend source code type checking.
+- License: Apache-2.0.
+- Source: https://github.com/microsoft/TypeScript
+
+3. ML components and model
+--------------------------
+
+NumPy
+- Used by: numerical operations and synthetic fallback generation.
+- License: BSD-3-Clause.
+- Source: https://github.com/numpy/numpy
+
+Pandas
+- Used by: loading and validating historical CSV data.
+- License: BSD-3-Clause.
+- Source: https://github.com/pandas-dev/pandas
+
+scikit-learn
+- Used by: StandardScaler and LogisticRegression pipeline, temporal validation, and quality metrics.
+- License: BSD-3-Clause.
+- Source: https://github.com/scikit-learn/scikit-learn
+
+joblib
+- Used by: saving and loading the trained ML artifact.
+- License: BSD-3-Clause.
+- Source: https://github.com/joblib/joblib
+
+Model
+- Name: risk-logistic-v1.
+- Type: StandardScaler followed by LogisticRegression.
+- Training source: an approved historical CSV can be supplied through ML_TRAINING_DATA.
+- Current repository state: no approved historical dataset is included; the service uses a clearly labelled synthetic fallback for the hackathon demo.
+- The model is not a production credit decision model.
+
+4. Datasets
+-----------
+
+No external or personal dataset is included in this repository.
+
+The default demo dataset is generated deterministically in code for smoke tests only. Historical data may be mounted locally at ml-service/data/historical_applications.csv, but that file is ignored by Git and must not contain personal data or confidential banking information.
+
+5. Container and infrastructure components
+-------------------------------------------
+
+PostgreSQL
+- Used by: local persistence for the demo.
+- License: PostgreSQL License.
+- Source: https://www.postgresql.org/
+
+Nginx
+- Used by: serving the frontend and proxying API routes.
+- License: 2-clause BSD-like license.
+- Source: https://nginx.org/
+
+Docker Official Images
+- Used by: python:3.12-slim, node:20-alpine, nginx:1.27-alpine, and postgres:16-alpine base/runtime images.
+- Sources: https://hub.docker.com/_/python, https://hub.docker.com/_/node, https://hub.docker.com/_/nginx, https://hub.docker.com/_/postgres
+
+6. Simulated integrations
+-------------------------
+
+The following integrations are local deterministic simulators. They do not call the real services and do not transmit data to external providers:
+
+- BKI / credit history simulator: backend/app/integrations/bki.py
+- EGRUL/EGRIP registry simulator: backend/app/integrations/egrul.py
+- FNS Transparent Business simulator: backend/app/integrations/fns.py
+
+The project does not use paid APIs, real credit bureau access, real tax-registry access, or external LLM providers.
+
+7. Project-owned code
+---------------------
+
+Application code, demo scenarios, synthetic profiles, decision rules, documentation, and visual design in this repository are project-owned hackathon demo materials unless otherwise stated above.
+
+8. Disclaimer
+-------------
+
+This project is a hackathon demonstration. It is not financial advice, a production lending system, or a validated credit-risk model. Check the license terms of all dependencies before commercial distribution.

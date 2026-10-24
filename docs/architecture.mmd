@@ -1,0 +1,27 @@
+flowchart LR
+  subgraph client [Клиентский кабинет]
+    UI[SPA: потребность / заявка / лента]
+  end
+  subgraph bank [Банк]
+    Q[Очередь аналитика]
+  end
+  subgraph platform [Конвейер]
+    API[FastAPI]
+    P[Pipeline]
+    S[Scoring]
+    D[Decision]
+    M1[BKI mock]
+    M2[EGRUL mock]
+    M3[FNS mock]
+    DB[(PostgreSQL)]
+  end
+  UI --> API
+  Q --> API
+  API --> DB
+  API --> P
+  P --> M1
+  P --> M2
+  P --> M3
+  P --> S
+  S --> D
+  D --> DB
